@@ -1,16 +1,23 @@
 <template>
   <div class="container mt-5">
-    <form>
-      <div class="mb-3">
-        <input type="email" class="form-control" placeholder="Zadanie do wykonania" v-model="taskName">
-        <div class="form-text" v-show="taskNameIsEmpty">To pole nie może być puste!</div>
-      </div>
-      <button type="button" class="btn btn-primary" @click="addTask">Dodaj</button>
-
-      <ul class="list-group">
-        <TaskItem v-for="task in tasks" :key="task.id" :id="task.id" :name="task.name" :removeTask="removeTask"/>
-      </ul>
+    <form @submit.prevent class="d-md-flex">
+      <input type="text" class="form-control" placeholder="Zadanie do wykonania" v-model="taskName"
+        @keyup.enter="addTask">
+      <div class="form-text d-md-none" v-show="taskNameIsEmpty">To pole nie może być puste!</div>
+      <button type="button" class="btn btn-primary d-block mt-2 mt-md-0 ms-md-2 add-task-btn-b"
+        @click="addTask">Dodaj</button>
     </form>
+    <div class="form-text d-none d-md-block" :class="taskNameIsEmpty ? 'd-block' : 'd-none-b'">To pole nie może być
+      puste!</div>
+    <ul class="list-group mt-4">
+      <TaskItem v-for="task in tasks" :key="task.id" :id="task.id" :name="task.name" :done="task.done" :removeTask="removeTask" :changeTaskIsDone="changeTaskIsDone" />
+    </ul>
+  </div>
+
+  <div class="container mt-5">
+    <ul class="list-group mt-4">
+      <TaskItem v-for="task in tasks.filter(task => task.done === true)" :key="task.id" :id="task.id" :name="task.name" :done="task.done" :removeTask="removeTask" :changeTaskIsDone="changeTaskIsDone" />
+    </ul>
   </div>
 </template>
 
@@ -35,7 +42,8 @@ export default {
         // NEW TASK PATTERN
         const task = {
           id: crypto.randomUUID(),
-          name: this.taskName.trim()
+          name: this.taskName.trim(),
+          done: false
         }
         // NEW TASK PATTERN END
 
@@ -49,6 +57,23 @@ export default {
     removeTask(id) {
       const updatedTasks = this.tasks.filter(task => task.id !== id);
       this.tasks = updatedTasks;
+    },
+    changeTaskIsDone(id, done) {
+      if(done) {
+        const tasks = [...this.tasks];
+        const updatedTask = tasks.find(task => task.id === id);
+        if(updatedTask) {
+          updatedTask.done = true;
+        }
+        this.tasks = tasks;
+      } else {
+        const tasks = [...this.tasks];
+        const updatedTask = tasks.find(task => task.id === id);
+        if(updatedTask) {
+          updatedTask.done = false;
+        }
+        this.tasks = tasks;
+      }
     }
   }
 }
@@ -57,5 +82,17 @@ export default {
 <style>
 body {
   background-color: #5f9ea0;
+}
+
+.add-task-btn-b {
+  @media(max-width: 767px) {
+    width: 100%;
+  }
+}
+
+.d-none-b {
+  @media (min-width: 768px) {
+    display: none !important;
+  }
 }
 </style>
