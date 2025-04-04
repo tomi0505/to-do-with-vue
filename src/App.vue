@@ -8,7 +8,7 @@
       <button type="button" class="btn btn-primary" @click="addTask">Dodaj</button>
 
       <ul class="list-group">
-        <TaskItem v-for="task in tasks" :key="task.id" :id="task.id" :name="task.name" />
+        <TaskItem v-for="task in tasks" :key="task.id" :id="task.id" :name="task.name" :removeTask="removeTask"/>
       </ul>
     </form>
   </div>
@@ -45,6 +45,10 @@ export default {
       } else {
         this.taskNameIsEmpty = true;
       }
+    },
+    removeTask(id) {
+      const updatedTasks = this.tasks.filter(task => task.id !== id);
+      this.tasks = updatedTasks;
     }
   }
 }
