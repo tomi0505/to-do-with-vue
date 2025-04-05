@@ -14,18 +14,16 @@
     </ul>
   </div>
 
-  <div class="container mt-5">
-    <ul class="list-group mt-4">
-      <TaskItem v-for="task in tasks.filter(task => task.done === true)" :key="task.id" :id="task.id" :name="task.name" :done="task.done" :removeTask="removeTask" :changeTaskIsDone="changeTaskIsDone" />
-    </ul>
-  </div>
+  <DoneTasks :tasks="tasks" :removeTask="removeTask" :changeTaskIsDone="changeTaskIsDone"/>
 </template>
 
 <script>
+import DoneTasks from './DoneTasks.vue';
 import TaskItem from './TaskItem.vue';
 
 export default {
   components: {
+    DoneTasks,
     TaskItem
   },
   data() {
