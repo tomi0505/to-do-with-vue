@@ -14,17 +14,21 @@
     </ul>
   </div>
 
-  <DoneTasks :tasks="tasks" :removeTask="removeTask" :changeTaskIsDone="changeTaskIsDone"/>
+  <div class="container mt-5">
+    <ul class="list-group mt-4">
+      <DoneTaskItem v-for="task in tasks.filter(task => task.done === true)" :key="task.id" :id="task.id" :name="task.name" :removeTask="removeTask" :restoreTask="restoreTask" />
+    </ul>
+  </div>
 </template>
 
 <script>
-import DoneTasks from './DoneTasks.vue';
 import TaskItem from './TaskItem.vue';
+import DoneTaskItem from './DoneTaskItem.vue';
 
 export default {
   components: {
-    DoneTasks,
-    TaskItem
+    TaskItem,
+    DoneTaskItem
   },
   data() {
     return {
@@ -71,6 +75,17 @@ export default {
         }
         this.tasks = tasks;
       }
+    },
+    restoreTask(id) {
+      const tasks = this.tasks.map(task => {
+        if(task.id === id) {
+          task.done = false;
+        }
+
+        return task;
+      });
+
+      this.tasks = tasks;
     }
   }
 }
