@@ -10,7 +10,7 @@
     <div class="form-text d-none d-md-block" :class="taskNameIsEmpty ? 'd-block' : 'd-md-none-b'">To pole nie może być
       puste!</div>
     <ul class="list-group mt-4">
-      <TaskItem v-for="task in tasks.filter(task => task.done === false)" :key="task.id" :id="task.id" :name="task.name" :done="task.done" :removeTask="removeTask" :changeTaskIsDone="changeTaskIsDone" />
+      <TaskItem v-for="task in tasks.filter(task => task.done === false)" :key="task.id" :id="task.id" :name="task.name" :done="task.done" :removeTask="removeTask" :changeTaskIsDone="changeTaskIsDone" :editTask="editTask" />
     </ul>
   </div>
 
@@ -80,6 +80,17 @@ export default {
       const tasks = this.tasks.map(task => {
         if(task.id === id) {
           task.done = false;
+        }
+
+        return task;
+      });
+
+      this.tasks = tasks;
+    },
+    editTask(id, name) {
+      const tasks = this.tasks.map(task => {
+        if(task.id === id) {
+          task.name = name;
         }
 
         return task;
